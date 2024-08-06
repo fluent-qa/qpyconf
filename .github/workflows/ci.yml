@@ -1,0 +1,21 @@
+name: Python PDM Project CI
+
+on: [push,pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v4
+    - name: Setup PDM
+      uses: pdm-project/setup-pdm@v4
+      # You are now able to use PDM in your workflow
+    - name: Install dependencies
+      run: pdm install
+    - name: run tests and coverage report
+      run: |
+        pdm run test
+        pdm run cov_report
+
