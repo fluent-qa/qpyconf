@@ -89,6 +89,10 @@ trailing_comma_inline_array = true
 [tool.pdm]
 distribution = true
 include = ["src"]
+[tool.pdm.build]
+includes = ["src"]
+source-includes = ["src/", "tests/","scripts/"]
+package-dir = "qpyconf"
 
 [tool.pdm.scripts]
 lint = "ruff ."
@@ -99,6 +103,7 @@ cov_badge = "coverage-badge -f -o coverage.svg"
 docs = "mkdocs serve"
 docs-deploy = "mkdocs gh-deploy --force"
 cleanup = "sh scripts/cleanup.sh"
+build = "pdm build"
 
 
 [tool.pdm.dev-dependencies]
