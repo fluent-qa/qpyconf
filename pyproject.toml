@@ -93,7 +93,7 @@ cov_badge = "coverage-badge -f -o coverage.svg"
 docs = "mkdocs serve"
 docs-deploy = "mkdocs gh-deploy --force"
 cleanup = "sh scripts/cleanup.sh"
-purge = "sh scripts/cleanup.sh && rm -rf .venv/"
+purge = " rm -rf .venv/ && sh scripts/cleanup.sh "
 
 [tool.pdm.dev-dependencies]
 lint = ["ruff>=0.4.9"]
