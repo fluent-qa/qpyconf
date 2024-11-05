@@ -22,16 +22,13 @@ keywords = [
     "pydantic",
     "easy settings management",
     "dynaconf",
-    "dotenv"
+    "dotenv",
 ]
 license = { text = "UNDEFINED" }
 name = "qpyconf"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
-    "dynaconf>=3.2.5",
-    "pydantic>=2.7.4",
-]
+dependencies = ["dynaconf>=3.2.5", "pydantic>=2.7.4"]
 
 [project.urls]
 issue = "https://github.com/fluent-qa/qpyconf/issues"
@@ -91,11 +88,10 @@ distribution = true
 include = ["src"]
 [tool.pdm.build]
 includes = ["src"]
-source-includes = ["src/", "tests/","scripts/"]
-package-dir = "qpyconf"
+source-includes = ["src/", "tests/", "scripts/"]
 
 [tool.pdm.scripts]
-lint = "ruff ."
+lint = "ruff check --fix"
 fmt = "ruff format . --check"
 test = "pytest --cov-report term --cov=qpyconf tests/"
 cov_report = "pytest --cov-report html --cov=qpyconf tests/"
@@ -103,6 +99,7 @@ cov_badge = "coverage-badge -f -o coverage.svg"
 docs = "mkdocs serve"
 docs-deploy = "mkdocs gh-deploy --force"
 cleanup = "sh scripts/cleanup.sh"
+purge = "sh scripts/cleanup.sh && rm -rf .venv/"
 build = "pdm build"
 
 
@@ -111,10 +108,10 @@ lint = ["ruff>=0.4.9"]
 test = ["pytest-cov>=5.0.0", "pytest>=8.2.2"]
 
 
-# [[tool.pdm.source]]
-# name = "mirrors"
-# url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+[[tool.pdm.source]]
+name = "mirrors"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 
-# [[tool.pdm.source]]
-# name = "douban"
-# url = "https://pypi.doubanio.com/simple/"
+[[tool.pdm.source]]
+name = "douban"
+url = "https://pypi.doubanio.com/simple/"
