@@ -2,10 +2,6 @@
 requires = ["mina-build>=0.2.5"]
 build-backend = "pdm.backend"
 
-#[build-system]
-#requires = ["pdm-backend", "pdm-polylith-workspace"]
-#build-backend = "pdm.backend"
-
 [project]
 authors = [{ name = "fluentqa", email = "fluentqa@fluent-qa.com" }]
 classifiers = [
@@ -28,7 +24,7 @@ license = { text = "UNDEFINED" }
 name = "qpyconf"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["dynaconf>=3.2.5", "pydantic>=2.7.4"]
+dependencies = ["dynaconf>=3.2.5", "pydantic>=2.7.4", "ruff>=0.7.2"]
 
 [project.urls]
 issue = "https://github.com/fluent-qa/qpyconf/issues"
@@ -41,7 +37,8 @@ log_cli_level = "info"
 log_date_format = "%Y-%m-%d %H:%M:%S"
 log_format = "%(asctime)s %(levelname)s %(message)s"
 minversion = "6.0"
-pythonpath = ["src"]
+cov = "qpyconf"
+cov-report = "html"
 
 [tool.coverage]
 
@@ -72,7 +69,8 @@ select = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101"]
+"tests/*" = ["S101", "D103", "D102", "D101"]
+"src/*" = ["D103", "D102", "D101"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -85,10 +83,6 @@ trailing_comma_inline_array = true
 
 [tool.pdm]
 distribution = true
-include = ["src"]
-[tool.pdm.build]
-includes = ["src"]
-source-includes = ["src/", "tests/", "scripts/"]
 
 [tool.pdm.scripts]
 lint = "ruff check --fix"
@@ -100,8 +94,6 @@ docs = "mkdocs serve"
 docs-deploy = "mkdocs gh-deploy --force"
 cleanup = "sh scripts/cleanup.sh"
 purge = "sh scripts/cleanup.sh && rm -rf .venv/"
-build = "pdm build"
-
 
 [tool.pdm.dev-dependencies]
 lint = ["ruff>=0.4.9"]
