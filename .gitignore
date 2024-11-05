@@ -14,7 +14,7 @@ _build
 .pdm-python
 # Installer logs
 pip-log.txt
-
+pdm.lock
 
 # Unit test / coverage reports
 .coverage
