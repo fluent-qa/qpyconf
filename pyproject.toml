@@ -23,7 +23,7 @@ keywords = [
 license = { text = "UNDEFINED" }
 name = "qpyconf"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = ["dynaconf>=3.2.5", "pydantic>=2.7.4", "ruff>=0.7.2"]
 
 [project.urls]
