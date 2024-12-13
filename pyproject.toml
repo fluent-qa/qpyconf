@@ -1,18 +1,17 @@
 [build-system]
-requires = ["mina-build>=0.2.5"]
-build-backend = "pdm.backend"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 authors = [{ name = "fluentqa", email = "fluentqa@fluent-qa.com" }]
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
 description = "A Simple Configuration Python Project"
-dynamic = ["version"]
+version = "0.1.0"
+requires-python = ">3.9"
 keywords = [
     "python configuration",
     "pydantic",
@@ -20,90 +19,123 @@ keywords = [
     "dynaconf",
     "dotenv",
 ]
-license = { text = "UNDEFINED" }
 name = "qpyconf"
 readme = "README.md"
-requires-python = ">=3.10"
-dependencies = ["dynaconf>=3.2.5", "pydantic>=2.7.4", "ruff>=0.7.2"]
+dependencies = [
+    "dynaconf>=3.2.5",
+    "pydantic>=2.7.4",
+    "qpyci",
+]
+
+#[tool.uv.sources]
+#torch = { index = "pytorch" }
+#
+#[[tool.uv.index]]
+#name = "pytorch"
+#url = "https://download.pytorch.org/whl/cpu"
 
 [project.urls]
 issue = "https://github.com/fluent-qa/qpyconf/issues"
 repository = "https://github.com/fluent-qa/qpyconf"
 
+[project.scripts]
+cleanup = "qpyci.commands:clean"
+cov = "ci:coverage"
+cov_badge = "qpyci.commands:generate_badge"
+check_format = "ci:check_format"
+
+[tool.hatch.build.targets.wheel.force-include]
+"ci.py" = "ci.py"
+
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.uv.sources]
+qpyci = { git = "https://github.com/fluent-qa/qpyci.git", rev = "main" }
+
+[tool.hatch.build.targets.wheel]
+packages = ["qpyconf"]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+reportUnnecessaryTypeIgnoreComment = true
+reportMissingTypeStubs = false
+include = ["src", "tests"]
+venvPath = ".venv"
+# see https://github.com/microsoft/pyright/issues/7771 - we don't want to error on decorated functions in tests
+# which are not otherwise used
+executionEnvironments = [
+    { root = "tests", reportUnusedFunction = false },
+]
+
+
+[dependency-groups]
+lint = [
+    "ruff>=0.8.3",
+]
+dev = [
+    "allure-pytest>=2.13.5",
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.4",
+    "coverage-badge>=1.1.2",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+include = [
+    "qpyconf/**/*.py",
+    "tests/**/*.py",
+    "docs/**/*.py",
+]
+
+[tool.ruff.lint]
+extend-select = [
+    "Q",
+    "RUF100",
+    "C90",
+    "UP",
+    "I",
+    "D",
+]
+flake8-quotes = { inline-quotes = "single", multiline-quotes = "double" }
+isort = { combine-as-imports = true, known-first-party = ["qpyconf"] }
+mccabe = { max-complexity = 15 }
+ignore = [
+    "D100", # ignore missing docstring in module
+    "D102", # ignore missing docstring in public method
+    "D104", # ignore missing docstring in public package
+    "D105", # ignore missing docstring in magic methods
+    "D107", # ignore missing docstring in __init__ methods
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+# don't format python in docstrings, pytest-examples takes care of it
+docstring-code-format = false
+quote-style = "single"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D"]
+"docs/**/*.py" = ["D"]
+"src/qpyconf/**/*.py" = ["D101", "D103"]
+
+
 [tool.pytest.ini_options]
-addopts = "-l -s --durations=0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = [
+    "--alluredir", "allure-results",
+    "--clean-alluredir",
+    "-l", "-s", "--durations", "0",
+    "--cov", "qpyconf"
+]
 log_cli = true
 log_cli_level = "info"
 log_date_format = "%Y-%m-%d %H:%M:%S"
 log_format = "%(asctime)s %(levelname)s %(message)s"
 minversion = "6.0"
-cov = "qpyconf"
-cov-report = "html"
 
-[tool.coverage]
-
-[tool.coverage.report]
-fail_under = 50
-
-[tool.coverage.run]
-source = ["src/qpyconf"]
-
-
-[tool.ruff]
-extend-exclude = ["template"]
-fix = true
-src = ["src"]
-
-[tool.ruff.lint]
-select = [
-    "B",      # flake8-bugbear
-    "D",      # pydocstyle
-    "E",      # pycodestyle error
-    "F",      # Pyflakes
-    "I",      # isort
-    "RUF100", # Unused noqa directive
-    "S",      # flake8-bandit
-    "SIM",    # flake8-simplify
-    "UP",     # pyupgrade
-    "W",      # pycodestyle warning
-]
-
-[tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "D103", "D102", "D101"]
-"src/*" = ["D103", "D102", "D101"]
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
-
-
-[tool.tomlsort]
-all = true
-in_place = true
-trailing_comma_inline_array = true
-
-[tool.pdm]
-distribution = true
-
-[tool.pdm.scripts]
-lint = "ruff check --fix"
-fmt = "ruff format . --check"
-test = "pytest --cov-report term --cov=qpyconf tests/"
-cov_report = "pytest --cov-report html --cov=qpyconf tests/"
-cov_badge = "coverage-badge -f -o coverage.svg"
-docs = "mkdocs serve"
-docs-deploy = "mkdocs gh-deploy --force"
-cleanup = "sh scripts/cleanup.sh"
-purge = " rm -rf .venv/ && sh scripts/cleanup.sh "
-
-[tool.pdm.dev-dependencies]
-lint = ["ruff>=0.4.9"]
-test = ["pytest-cov>=5.0.0", "pytest>=8.2.2"]
-
-
-[[tool.pdm.source]]
-name = "mirrors"
-url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
-
-[[tool.pdm.source]]
-name = "douban"
-url = "https://pypi.doubanio.com/simple/"
