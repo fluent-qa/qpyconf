@@ -41,7 +41,7 @@ repository = "https://github.com/fluent-qa/qpyconf"
 [project.scripts]
 cleanup = "qpyci.commands:clean"
 cov = "ci:coverage"
-cov_badge = "qpyci.commands:generate_badge"
+badge = "qpyci.commands:generate_badge"
 check_format = "ci:check_format"
 
 [tool.hatch.build.targets.wheel.force-include]
