@@ -11,7 +11,7 @@ classifiers = [
 ]
 description = "A Simple Configuration Python Project"
 version = "0.1.0"
-requires-python = ">3.9"
+requires-python = ">=3.9"
 keywords = [
     "python configuration",
     "pydantic",
@@ -138,4 +138,3 @@ log_cli_level = "info"
 log_date_format = "%Y-%m-%d %H:%M:%S"
 log_format = "%(asctime)s %(levelname)s %(message)s"
 minversion = "6.0"
-
