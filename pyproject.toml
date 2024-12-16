@@ -52,7 +52,7 @@ default-groups = ["dev"]
 qpyci = { git = "https://github.com/fluent-qa/qpyci.git", rev = "main" }
 
 [tool.hatch.build.targets.wheel]
-packages = ["qpyconf"]
+packages = ["src/qpyconf"]
 
 [tool.pyright]
 typeCheckingMode = "strict"
