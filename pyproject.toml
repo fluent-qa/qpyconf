@@ -11,7 +11,7 @@ classifiers = [
 ]
 description = "A Simple Configuration Python Project"
 version = "0.1.0"
-requires-python = ">=3.9"
+requires-python = ">3.9"
 keywords = [
     "python configuration",
     "pydantic",
@@ -21,11 +21,7 @@ keywords = [
 ]
 name = "qpyconf"
 readme = "README.md"
-dependencies = [
-    "dynaconf>=3.2.5",
-    "pydantic>=2.7.4",
-    "qpyci",
-]
+dependencies = ["dynaconf>=3.2.5", "pydantic>=2.7.4", "qpyci"]
 
 #[tool.uv.sources]
 #torch = { index = "pytorch" }
@@ -43,6 +39,7 @@ cleanup = "qpyci.commands:clean"
 cov = "ci:coverage"
 badge = "qpyci.commands:generate_badge"
 check_format = "ci:check_format"
+ci = "ci:ci"
 
 [tool.hatch.build.targets.wheel.force-include]
 "ci.py" = "ci.py"
@@ -65,15 +62,11 @@ include = ["src", "tests"]
 venvPath = ".venv"
 # see https://github.com/microsoft/pyright/issues/7771 - we don't want to error on decorated functions in tests
 # which are not otherwise used
-executionEnvironments = [
-    { root = "tests", reportUnusedFunction = false },
-]
+executionEnvironments = [{ root = "tests", reportUnusedFunction = false }]
 
 
 [dependency-groups]
-lint = [
-    "ruff>=0.8.3",
-]
+lint = ["ruff>=0.8.3"]
 dev = [
     "allure-pytest>=2.13.5",
     "pytest-cov>=6.0.0",
@@ -84,21 +77,10 @@ dev = [
 [tool.ruff]
 line-length = 120
 target-version = "py39"
-include = [
-    "qpyconf/**/*.py",
-    "tests/**/*.py",
-    "docs/**/*.py",
-]
+include = ["qpyconf/**/*.py", "tests/**/*.py", "docs/**/*.py"]
 
 [tool.ruff.lint]
-extend-select = [
-    "Q",
-    "RUF100",
-    "C90",
-    "UP",
-    "I",
-    "D",
-]
+extend-select = ["Q", "RUF100", "C90", "UP", "I", "D"]
 flake8-quotes = { inline-quotes = "single", multiline-quotes = "double" }
 isort = { combine-as-imports = true, known-first-party = ["qpyconf"] }
 mccabe = { max-complexity = 15 }
@@ -128,10 +110,15 @@ quote-style = "single"
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = [
-    "--alluredir", "allure-results",
+    "--alluredir",
+    "allure-results",
     "--clean-alluredir",
-    "-l", "-s", "--durations", "0",
-    "--cov", "qpyconf"
+    "-l",
+    "-s",
+    "--durations",
+    "0",
+    "--cov",
+    "qpyconf",
 ]
 log_cli = true
 log_cli_level = "info"
