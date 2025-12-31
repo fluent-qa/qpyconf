@@ -31,9 +31,8 @@ repository = "https://github.com/fluent-qa/qpyconf"
 
 [project.scripts]
 cleanup = "qpyci.commands:cleanup"
-cov = "qpyci.ci:coverage"
-badge = "qpyci.ci:badge"
-check_format = "qpyci.ci:check_format"
+badge = "qpyci.commands:badge"
+check_format = "qpyci.commands:check_format"
 ci = "qpyci.commands:ci"
 
 
@@ -55,9 +54,9 @@ dev = [
     "coverage-badge>=1.1.2",
 ]
 
+[tool.pytest.ini_options]
+addopts = "--basetemp=.pytest_tmp"
+
 [tool.ruff]
 line-length = 120
 target-version = "py39"
-
-
-

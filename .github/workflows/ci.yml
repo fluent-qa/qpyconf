@@ -32,7 +32,14 @@ jobs:
       - name: Sync dependencies
         run: uv sync
 
-      - name: CI
-        run: uv run ci
-      - name:
+      - name: Run tests with coverage
+        run: uv run coverage run --source=src/qpyconf -m pytest
+
+      - name: Coverage report
+        run: uv run coverage report -m
+
+      - name: Generate coverage badge
+        run: uv run coverage-badge -o coverage.svg -f
+      
+      - name: Cleanup
         run: uv run cleanup
