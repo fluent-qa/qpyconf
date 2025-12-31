@@ -7,3 +7,7 @@ pg_a_url = "postgresql+psycopg_async://postgres:changeit@127.0.0.1:5432/workspac
 [test]
 key = "abc"
 databases.default.url = "postgresql+psycopg_async://postgres:changeit@127.0.0.1:5432/workspace"
+
+[prod]
+key = "abc-prod"
+databases.default.url = "postgresql+psycopg_async://postgres:prod_changeit@127.0.0.1:5432/workspace"

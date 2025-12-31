@@ -1,30 +1,35 @@
-# fluentqa-conf
+# qpyconf
 ![ci](https://github.com/fluent-qa/qpyconf/actions/workflows/ci.yml/badge.svg?event=push&branch=main)
 ![coverage](coverage.svg)
 
-configuration support both:
-1. .env file
-2. settings.toml file
+`qpyconf` is a small configuration helper built on top of:
+- `dynaconf` for loading and layering settings from files + environment variables
+- `pydantic` for validating and converting settings into typed models
 
-## 1. How to Use
+It supports:
+- `.env` files (via Dynaconf `load_dotenv`)
+- `settings.toml` (and other Dynaconf-supported formats like JSON/YAML/INI)
+- Dynaconf environments (e.g. `[default]`, `[test]`) with runtime switching
 
-- ```uv``` as An extremely fast Python package and project manager, written in Rust.
-- uv commands:
-```shell
-uv init: Create a new Python project.
-uv add: Add a dependency to the project.
-uv remove: Remove a dependency from the project.
-uv sync: Sync the project's dependencies with the environment.
-uv lock: Create a lockfile for the project's dependencies.
-uv run: Run a command in the project environment.
-uv tree: View the dependency tree for the project.
-uv build: Build the project into distribution archives.
-uv publish: Publish the project to a package index.
+Docs:
+- [Installation](docs/installation.md)
+- [Usage](docs/usage.md)
+
+## Install
+
+```sh
+uv add qpyconf
 ```
 
-### 1.1 Settings in Settings.xml
+```sh
+pip install qpyconf
+```
 
-```yaml
+## Quickstart
+
+Create a `settings.toml`:
+
+```toml
 [default]
 key = "value"
 databases = { default = { url = "postgresql+psycopg://postgres:changeit@127.0.0.1:5432/workspace" } }
@@ -36,42 +41,20 @@ key = "abc"
 databases.default.url = "postgresql+psycopg_async://postgres:changeit@127.0.0.1:5432/workspace"
 ```
 
-### 1.2 Getting Key Value
+Read settings:
 
 ```python
-def test_simple_kv():
-    assert settings.key == "value"
+from qpyconf import settings
+
+assert settings.key == "value"
 ```
 
-### 1.3 Getting Nested Value or Structured value
+More examples:
+- [docs/usage.md](docs/usage.md)
 
-```python
-def test_nested_settings():
-    assert isinstance(settings.databases,dict)
-```
+## Development
 
-### 1.4 Switch Environment
-
-1. swith environment to test
-2. the database default url is changed to test environment, not default value anymore
-
-```python
-def test_switch_env_variables():
-    qpyconf.ensure_env_settings(env_name="test")
-    assert qpyconf.settings.databases.default.url == "postgresql+psycopg_async://postgres:changeit@127.0.0.1:5432/workspace"
-
-```
-
-### 1.5. getting value from .env file
-
-- env file
 ```sh
-ENV_EXAMPLE='ENV_EXAMPLE'
-```
-- Get this value
-
-```python
-def test_env_settings():
-    print(settings.env_example)
-    assert settings.env_example=="ENV_EXAMPLE"
+uv sync
+uv run ci
 ```

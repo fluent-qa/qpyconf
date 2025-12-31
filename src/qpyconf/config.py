@@ -26,8 +26,5 @@ def ensure_env_settings(env_name: str, conf: Dynaconf = settings):
 
 
 def setting_to_model(setting: Dynaconf, model_type: type[BaseModel]):
-    model_value = model_type()
-    for model_field in model_type.model_fields:
-        setattr(model_value, model_field, getattr(setting, model_field))
-    return model_value
-
+    data = {field_name: getattr(setting, field_name) for field_name in model_type.model_fields}
+    return model_type.model_validate(data)

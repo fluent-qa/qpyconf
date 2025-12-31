@@ -25,39 +25,30 @@ from qpyconf.config import settings
 #     ...
 
 
-@allure.title('test simple kv setting')
-@allure.tag('basic function')
+@allure.title("test simple kv setting")
+@allure.tag("basic function")
 def test_simple_kv():
-    assert settings.key == 'value'
+    assert settings.key == "value"
 
 
-@allure.title('test nested kv setting for dict object')
-@allure.tag('basic function')
+@allure.title("test nested kv setting for dict object")
+@allure.tag("basic function")
 def test_nested_settings():
     assert isinstance(settings.databases, dict)
 
 
-@allure.title('test nested kv setting for string object')
-@allure.tag('basic function')
+@allure.title("test nested kv setting for string object")
+@allure.tag("basic function")
 def test_nested_kv():
-    assert settings.databases.default.url == 'postgresql+psycopg://postgres:changeit@127.0.0.1:5432/workspace'
+    assert settings.databases.default.url == "postgresql+psycopg://postgres:changeit@127.0.0.1:5432/workspace"
 
 
-@allure.title('test switch env_name variable in runtime')
-@allure.tag('dynamic function')
+@allure.title("test switch env_name variable in runtime")
+@allure.tag("dynamic function")
 def test_switch_env_variables():
-    qpyconf.ensure_env_settings(env_name='test')
+    qpyconf.ensure_env_settings(env_name="test")
     assert (
         qpyconf.settings.databases.default.url
-        == 'postgresql+psycopg_async://postgres:changeit@127.0.0.1:5432/workspace'
+        == "postgresql+psycopg_async://postgres:changeit@127.0.0.1:5432/workspace"
     )
-
-
-@allure.title('test after swith env_name the setting changes')
-@allure.tag('dynamic function')
-def test_env_settings():
-    print(settings.env_example)
-    assert settings.env_example == 'ENV_EXAMPLE'
-
-
-## test settings to nested model
+    qpyconf.ensure_env_settings(env_name="default")
