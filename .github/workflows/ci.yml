@@ -20,6 +20,8 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
+          cache-dependency-glob: |
+            **/pyproject.toml
           version: "latest"
 
       - name: Set up Python
@@ -32,3 +34,5 @@ jobs:
 
       - name: CI
         run: uv run ci
+      - name:
+        run: uv run cleanup
